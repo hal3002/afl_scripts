@@ -1,1 +1,1 @@
-# afl_scripts
+Just a place to store misc. afl scripts.
