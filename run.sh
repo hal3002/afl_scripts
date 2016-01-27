@@ -37,13 +37,13 @@ tmux send-keys -t $SESSION_NAME:0 "afl-fuzz -M master -m $AFL_MEMORY_LIMIT -t $A
 # Now we need to create the workers
 for x in $(seq $( expr $CPUS - 1 ))
 do
-	tmux new-window -t $SESSION:$x -n "Worker$x"
+	tmux new-window -t $SESSION_NAME:$x -n "Worker$x"
 	tmux send-keys -t $SESSION_NAME:$x "afl-fuzz -S worker$x -m $AFL_MEMORY_LIMIT -t $AFL_TIMEOUT_LIMIT -i $TESTCASE_PATH -o $FINDINGS_PATH $SESSION_BIN $SESSION_FLAGS" C-m
 done
 
 # Create a status window
-tmux new-window -t $SESSION:$CPUS -n "Status"
-tmux send-keys -t $SESSION:$CPUS "watch -n 1 afl-whatsup $FINDINGS_PATH" C-m
+tmux new-window -t $SESSION_NAME:$CPUS -n "Status"
+tmux send-keys -t $SESSION_NAME:$CPUS "watch -n 1 afl-whatsup $FINDINGS_PATH" C-m
 
 # Finally, attach to the new session
 tmux attach -t $SESSION_NAME
